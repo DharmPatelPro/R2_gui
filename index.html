@@ -32,6 +32,123 @@
             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
 
+        .menu-toggle {
+            background: #00b894;
+            border: none;
+            color: white;
+            padding: 10px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .menu-toggle:hover {
+            background: #00a085;
+            transform: translateY(-2px);
+        }
+
+        .nav-menu {
+            position: fixed;
+            top: 70px;
+            left: -100%;
+            width: 280px;
+            height: calc(100vh - 70px);
+            background: #ffffff;
+            box-shadow: 4px 0 15px rgba(0, 0, 0, 0.1);
+            transition: left 0.3s ease;
+            z-index: 99;
+            overflow-y: auto;
+        }
+
+        .nav-menu.open {
+            left: 0;
+        }
+
+        .nav-item {
+            width: 100%;
+            padding: 20px 25px;
+            text-align: left;
+            background: #ffffff;
+            border: none;
+            color: #636e72;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-bottom: 1px solid #f1f2f6;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .nav-item:hover {
+            background: #f1f2f6;
+            color: #00b894;
+            padding-left: 35px;
+        }
+
+        .nav-item.active {
+            background: #e8f5f3;
+            color: #00b894;
+            border-left: 4px solid #00b894;
+        }
+
+        .nav-overlay {
+            position: fixed;
+            top: 70px;
+            left: 0;
+            width: 100%;
+            height: calc(100vh - 70px);
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 98;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .nav-overlay.open {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .content {
+            margin-top: 90px;
+            padding: 20px;
+            transition: margin-left 0.3s ease;
+        }
+
+        .hamburger {
+            width: 20px;
+            height: 20px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+        }
+
+        .hamburger span {
+            width: 100%;
+            height: 2px;
+            background: white;
+            transition: all 0.3s ease;
+        }
+
+        .hamburger.open span:nth-child(1) {
+            transform: rotate(45deg) translate(6px, 6px);
+        }
+
+        .hamburger.open span:nth-child(2) {
+            opacity: 0;
+        }
+
+        .hamburger.open span:nth-child(3) {
+            transform: rotate(-45deg) translate(6px, -6px);
+        }
+
         .status {
             font-size: 16px;
             font-weight: bold;
@@ -314,21 +431,43 @@
 <body>
     <div class="header">
         <div style="display: flex; align-items: center;">
-            <h1 style="font-size: 20px; color: #00b894;">Robot Control</h1>
+            <button class="menu-toggle" id="menuToggle" onclick="toggleMenu()">
+                <div class="hamburger" id="hamburger">
+                    <span></span>
+                    <span></span>
+                    <span></span>
+                </div>
+                Menu
+            </button>
+            <h1 style="font-size: 20px; color: #00b894; margin-left: 15px;">Robot Control</h1>
             <div class="live-indicator" id="liveIndicator"></div>
         </div>
         <div class="status" id="status">Disconnected</div>
         <button class="connect-btn" id="connectBtn" onclick="connectBLE()">Connect</button>
     </div>
 
-    <div class="nav-tabs">
-        <button class="nav-tab active" onclick="showPage('speeds')">Speeds</button>
-        <button class="nav-tab" onclick="showPage('angles')">S.Angles</button>
-        <button class="nav-tab" onclick="showPage('other')">O.Angles</button>
-        <button class="nav-tab" onclick="showPage('motion')">Motion</button>
-        <button class="nav-tab" onclick="showPage('system')">System</button>
-        <button class="nav-tab" onclick="showPage('debug')">Debug</button>
+    <div class="nav-menu" id="navMenu">
+        <button class="nav-item active" onclick="showPage('speeds')">
+            <span>📊</span> Speeds
+        </button>
+        <button class="nav-item" onclick="showPage('angles')">
+            <span>📐</span> S.Angles
+        </button>
+        <button class="nav-item" onclick="showPage('other')">
+            <span>🔄</span> O.Angles
+        </button>
+        <button class="nav-item" onclick="showPage('motion')">
+            <span>🚀</span> Motion
+        </button>
+        <button class="nav-item" onclick="showPage('system')">
+            <span>⚙️</span> System
+        </button>
+        <button class="nav-item" onclick="showPage('debug')">
+            <span>🐛</span> Debug
+        </button>
     </div>
+
+    <div class="nav-overlay" id="navOverlay" onclick="closeMenu()"></div>
 
     <div class="content">
         <!-- Debug Page -->
@@ -1029,7 +1168,49 @@
                 }
             }
         });
+        function toggleMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const navOverlay = document.getElementById('navOverlay');
+            const hamburger = document.getElementById('hamburger');
 
+            navMenu.classList.toggle('open');
+            navOverlay.classList.toggle('open');
+            hamburger.classList.toggle('open');
+        }
+
+        function closeMenu() {
+            const navMenu = document.getElementById('navMenu');
+            const navOverlay = document.getElementById('navOverlay');
+            const hamburger = document.getElementById('hamburger');
+
+            navMenu.classList.remove('open');
+            navOverlay.classList.remove('open');
+            hamburger.classList.remove('open');
+        }
+
+        // Update the showPage function to close menu and update active state
+        function showPage(pageId) {
+            // Close menu
+            closeMenu();
+
+            // Update page visibility
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(t => t.classList.remove('active'));
+
+            document.getElementById(pageId).classList.add('active');
+
+            // Update active nav item
+            const navItems = document.querySelectorAll('.nav-item');
+            const pageNames = ['speeds', 'angles', 'other', 'motion', 'system', 'debug'];
+            const activeIndex = pageNames.indexOf(pageId);
+            if (activeIndex !== -1 && navItems[activeIndex]) {
+                navItems[activeIndex].classList.add('active');
+            }
+        }
+
+        // Export functions for global access
+        window.toggleMenu = toggleMenu;
+        window.closeMenu = closeMenu;
         // Export functions for global access
         window.connectBLE = connectBLE;
         window.showPage = showPage;
