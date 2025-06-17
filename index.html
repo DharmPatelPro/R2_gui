@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Robot Control</title>
@@ -10,13 +11,13 @@
             box-sizing: border-box;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        
+
         body {
             background: #f8f9fa;
             color: #2d3436;
             overflow-x: hidden;
         }
-        
+
         .header {
             background: #ffffff;
             border-bottom: 2px solid #00b894;
@@ -28,19 +29,19 @@
             top: 0;
             width: 100%;
             z-index: 100;
-            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
         }
-        
+
         .status {
             font-size: 16px;
             font-weight: bold;
             color: #e17055;
         }
-        
+
         .status.connected {
             color: #00b894;
         }
-        
+
         .connect-btn {
             background: #00b894;
             border: none;
@@ -52,12 +53,18 @@
             cursor: pointer;
             transition: all 0.3s ease;
         }
-        
+
         .connect-btn:hover {
             background: #00a085;
             transform: translateY(-2px);
         }
-        
+
+        .connect-btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .nav-tabs {
             display: flex;
             background: #ffffff;
@@ -67,7 +74,7 @@
             width: 100%;
             z-index: 99;
         }
-        
+
         .nav-tab {
             flex: 1;
             padding: 15px 8px;
@@ -81,40 +88,40 @@
             transition: all 0.3s ease;
             border-bottom: 3px solid transparent;
         }
-        
+
         .nav-tab:hover {
             background: #f1f2f6;
             color: #00b894;
         }
-        
+
         .nav-tab.active {
             background: #ffffff;
             color: #00b894;
             border-bottom: 3px solid #00b894;
         }
-        
+
         .content {
             margin-top: 130px;
             padding: 20px;
         }
-        
+
         .page {
             display: none;
         }
-        
+
         .page.active {
             display: block;
         }
-        
+
         .param-group {
             background: #ffffff;
             margin-bottom: 20px;
             border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.08);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
             border: 1px solid #e9ecef;
         }
-        
+
         .param-card {
             background: #f8f9fa;
             border: 2px solid #e9ecef;
@@ -124,39 +131,39 @@
             text-align: center;
             transition: all 0.3s ease;
         }
-        
+
         .param-card:hover {
             border-color: #00b894;
             transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,184,148,0.15);
+            box-shadow: 0 6px 20px rgba(0, 184, 148, 0.15);
         }
-        
+
         .param-label {
             font-size: 18px;
             font-weight: bold;
             color: #2d3436;
             margin-bottom: 15px;
         }
-        
+
         .param-value {
             font-size: 32px;
             font-weight: bold;
             color: #00b894;
             margin-bottom: 20px;
-            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
             padding: 10px;
             background: #ffffff;
             border-radius: 8px;
             border: 2px solid #00b894;
         }
-        
+
         .param-controls {
             display: flex;
             flex-direction: column;
             align-items: center;
             gap: 12px;
         }
-        
+
         .btn {
             background: #74b9ff;
             border: none;
@@ -169,38 +176,44 @@
             min-width: 80px;
             transition: all 0.3s ease;
         }
-        
+
         .btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
         }
-        
+
         .btn:active {
             transform: translateY(0);
         }
-        
+
+        .btn:disabled {
+            background: #ccc;
+            cursor: not-allowed;
+            transform: none;
+        }
+
         .btn-up {
             background: #00b894;
         }
-        
-        .btn-up:hover {
+
+        .btn-up:hover:not(:disabled) {
             background: #00a085;
         }
-        
+
         .btn-down {
             background: #e17055;
         }
-        
-        .btn-down:hover {
+
+        .btn-down:hover:not(:disabled) {
             background: #d63031;
         }
-        
+
         .input-set-container {
             display: flex;
             align-items: center;
             gap: 8px;
         }
-        
+
         .input-field {
             background: #ffffff;
             border: 2px solid #ddd;
@@ -213,20 +226,20 @@
             font-weight: bold;
             transition: border-color 0.3s ease;
         }
-        
+
         .input-field:focus {
             outline: none;
             border-color: #00b894;
         }
-        
+
         .btn-set {
             background: #6c5ce7;
         }
-        
-        .btn-set:hover {
+
+        .btn-set:hover:not(:disabled) {
             background: #5f3dc4;
         }
-        
+
         .live-indicator {
             width: 12px;
             height: 12px;
@@ -235,36 +248,61 @@
             margin-left: 10px;
             animation: blink 1s infinite;
         }
-        
+
         .live-indicator.active {
             background: #00b894;
         }
-        
+
         @keyframes blink {
-            0%, 50% { opacity: 1; }
-            51%, 100% { opacity: 0.3; }
+
+            0%,
+            50% {
+                opacity: 1;
+            }
+
+            51%,
+            100% {
+                opacity: 0.3;
+            }
         }
-        
+
         .speeds-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
             margin-bottom: 20px;
         }
-        
+
         .home-speed-section {
             grid-column: 1 / -1;
         }
-        
+
+        .debug-panel {
+            background: #2d3436;
+            color: #ffffff;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-family: monospace;
+            font-size: 12px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .debug-panel h3 {
+            color: #00b894;
+            margin-bottom: 10px;
+        }
+
         @media (max-width: 768px) {
             .speeds-grid {
                 grid-template-columns: 1fr;
             }
-            
+
             .param-value {
                 font-size: 28px;
             }
-            
+
             .nav-tab {
                 font-size: 12px;
                 padding: 12px 5px;
@@ -272,6 +310,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="header">
         <div style="display: flex; align-items: center;">
@@ -279,18 +318,32 @@
             <div class="live-indicator" id="liveIndicator"></div>
         </div>
         <div class="status" id="status">Disconnected</div>
-        <button class="connect-btn" onclick="connectBLE()">Connect</button>
+        <button class="connect-btn" id="connectBtn" onclick="connectBLE()">Connect</button>
     </div>
-    
+
     <div class="nav-tabs">
         <button class="nav-tab active" onclick="showPage('speeds')">Speeds</button>
         <button class="nav-tab" onclick="showPage('angles')">S.Angles</button>
         <button class="nav-tab" onclick="showPage('other')">O.Angles</button>
         <button class="nav-tab" onclick="showPage('motion')">Motion</button>
         <button class="nav-tab" onclick="showPage('system')">System</button>
+        <button class="nav-tab" onclick="showPage('debug')">Debug</button>
     </div>
-    
+
     <div class="content">
+        <!-- Debug Page -->
+        <div class="page" id="debug">
+            <div class="debug-panel">
+                <h3>Connection Debug</h3>
+                <div id="debugOutput">Ready to connect...</div>
+            </div>
+            <div class="param-group">
+                <button class="btn" onclick="testBLESupport()">Test BLE Support</button>
+                <button class="btn" onclick="clearDebug()">Clear Debug</button>
+                <button class="btn" onclick="scanDevices()">Scan Devices</button>
+            </div>
+        </div>
+
         <!-- Shoot Speeds Page -->
         <div class="page active" id="speeds">
             <div class="param-group">
@@ -301,46 +354,50 @@
                         <div class="param-controls">
                             <button class="btn btn-up" onclick="adjustParam('shoot_1_speed', 0.5)">+ 0.5</button>
                             <div class="input-set-container">
-                                <input type="number" class="input-field" id="shoot_1_speed_input" step="0.5" placeholder="0.0">
+                                <input type="number" class="input-field" id="shoot_1_speed_input" step="0.5"
+                                    placeholder="0.0">
                                 <button class="btn btn-set" onclick="setFromInput('shoot_1_speed')">Set</button>
                             </div>
                             <button class="btn btn-down" onclick="adjustParam('shoot_1_speed', -0.5)">- 0.5</button>
                         </div>
                     </div>
-                    
+
                     <div class="param-card">
                         <div class="param-label">Speed 2</div>
                         <div class="param-value" id="shoot_2_speed_display">0.0</div>
                         <div class="param-controls">
                             <button class="btn btn-up" onclick="adjustParam('shoot_2_speed', 0.5)">+ 0.5</button>
                             <div class="input-set-container">
-                                <input type="number" class="input-field" id="shoot_2_speed_input" step="0.5" placeholder="0.0">
+                                <input type="number" class="input-field" id="shoot_2_speed_input" step="0.5"
+                                    placeholder="0.0">
                                 <button class="btn btn-set" onclick="setFromInput('shoot_2_speed')">Set</button>
                             </div>
                             <button class="btn btn-down" onclick="adjustParam('shoot_2_speed', -0.5)">- 0.5</button>
                         </div>
                     </div>
-                    
+
                     <div class="param-card">
                         <div class="param-label">Speed 3</div>
                         <div class="param-value" id="shoot_3_speed_display">0.0</div>
                         <div class="param-controls">
                             <button class="btn btn-up" onclick="adjustParam('shoot_3_speed', 0.5)">+ 0.5</button>
                             <div class="input-set-container">
-                                <input type="number" class="input-field" id="shoot_3_speed_input" step="0.5" placeholder="0.0">
+                                <input type="number" class="input-field" id="shoot_3_speed_input" step="0.5"
+                                    placeholder="0.0">
                                 <button class="btn btn-set" onclick="setFromInput('shoot_3_speed')">Set</button>
                             </div>
                             <button class="btn btn-down" onclick="adjustParam('shoot_3_speed', -0.5)">- 0.5</button>
                         </div>
                     </div>
-                    
+
                     <div class="param-card home-speed-section">
                         <div class="param-label">Home Speed</div>
                         <div class="param-value" id="home_speed_display">0.0</div>
                         <div class="param-controls">
                             <button class="btn btn-up" onclick="adjustParam('home_speed', 0.1)">+ 0.1</button>
                             <div class="input-set-container">
-                                <input type="number" class="input-field" id="home_speed_input" step="0.1" placeholder="0.0">
+                                <input type="number" class="input-field" id="home_speed_input" step="0.1"
+                                    placeholder="0.0">
                                 <button class="btn btn-set" onclick="setFromInput('home_speed')">Set</button>
                             </div>
                             <button class="btn btn-down" onclick="adjustParam('home_speed', -0.1)">- 0.1</button>
@@ -349,7 +406,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Shoot Angles Page -->
         <div class="page" id="angles">
             <div class="param-group">
@@ -367,7 +424,7 @@
                         <button class="btn btn-down" onclick="adjustParam('shoot_1_angle', -5)">- 5°</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Angle 2</div>
                     <div class="param-value" id="shoot_2_angle_display">0.0°</div>
@@ -382,7 +439,7 @@
                         <button class="btn btn-down" onclick="adjustParam('shoot_2_angle', -5)">- 5°</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Angle 3</div>
                     <div class="param-value" id="shoot_3_angle_display">0.0°</div>
@@ -399,7 +456,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Other Angles Page -->
         <div class="page" id="other">
             <div class="param-group">
@@ -417,7 +474,7 @@
                         <button class="btn btn-down" onclick="adjustParam('dribble_angle', -5)">- 5°</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Load</div>
                     <div class="param-value" id="load_angle_display">0.0°</div>
@@ -432,7 +489,7 @@
                         <button class="btn btn-down" onclick="adjustParam('load_angle', -5)">- 5°</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Catch</div>
                     <div class="param-value" id="catch_angle_display">0.0°</div>
@@ -447,7 +504,7 @@
                         <button class="btn btn-down" onclick="adjustParam('catch_angle', -5)">- 5°</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Shoot</div>
                     <div class="param-value" id="shoot_angle_display">0.0°</div>
@@ -464,7 +521,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- Motion Parameters Page -->
         <div class="page" id="motion">
             <div class="param-group">
@@ -474,26 +531,28 @@
                     <div class="param-controls">
                         <button class="btn btn-up" onclick="adjustParam('accel_ratio', 0.1)">+ 0.1</button>
                         <div class="input-set-container">
-                            <input type="number" class="input-field" id="accel_ratio_input" step="0.1" placeholder="0.0">
+                            <input type="number" class="input-field" id="accel_ratio_input" step="0.1"
+                                placeholder="0.0">
                             <button class="btn btn-set" onclick="setFromInput('accel_ratio')">Set</button>
                         </div>
                         <button class="btn btn-down" onclick="adjustParam('accel_ratio', -0.1)">- 0.1</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Decel Ratio</div>
                     <div class="param-value" id="decel_ratio_display">0.0</div>
                     <div class="param-controls">
                         <button class="btn btn-up" onclick="adjustParam('decel_ratio', 0.1)">+ 0.1</button>
                         <div class="input-set-container">
-                            <input type="number" class="input-field" id="decel_ratio_input" step="0.1" placeholder="0.0">
+                            <input type="number" class="input-field" id="decel_ratio_input" step="0.1"
+                                placeholder="0.0">
                             <button class="btn btn-set" onclick="setFromInput('decel_ratio')">Set</button>
                         </div>
                         <button class="btn btn-down" onclick="adjustParam('decel_ratio', -0.1)">- 0.1</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Inertia</div>
                     <div class="param-value" id="inertia_display">0.0</div>
@@ -508,7 +567,7 @@
                 </div>
             </div>
         </div>
-        
+
         <!-- System Parameters Page -->
         <div class="page" id="system">
             <div class="param-group">
@@ -524,14 +583,15 @@
                         <button class="btn btn-down" onclick="adjustParam('gear_ratio', -0.1)">- 0.1</button>
                     </div>
                 </div>
-                
+
                 <div class="param-card">
                     <div class="param-label">Angle Offset</div>
                     <div class="param-value" id="angle_offset_display">0.0°</div>
                     <div class="param-controls">
                         <button class="btn btn-up" onclick="adjustParam('angle_offset', 1)">+ 1°</button>
                         <div class="input-set-container">
-                            <input type="number" class="input-field" id="angle_offset_input" step="0.1" placeholder="0.0">
+                            <input type="number" class="input-field" id="angle_offset_input" step="0.1"
+                                placeholder="0.0">
                             <button class="btn btn-set" onclick="setFromInput('angle_offset')">Set</button>
                         </div>
                         <button class="btn btn-down" onclick="adjustParam('angle_offset', -1)">- 1°</button>
@@ -542,156 +602,443 @@
     </div>
 
     <script>
+        // Complete JavaScript for Robot Control Interface
+
         let device, server, service, characteristicGet, characteristicSet;
         let connected = false;
         let liveUpdateInterval;
+        let connectionTimeout;
 
         const SERVICE_UUID = '12345678-1234-1234-1234-123456789abc';
         const CHAR_UUID_GET = '87654321-4321-4321-4321-cba987654321';
         const CHAR_UUID_SET = '11111111-2222-3333-4444-555555555555';
 
+        // Parameter storage
+        const parameters = {
+            accel_ratio: 0.0,
+            decel_ratio: 0.0,
+            inertia: 0.0,
+            shoot_1_angle: 0.0,
+            shoot_2_angle: 0.0,
+            shoot_3_angle: 0.0,
+            shoot_1_speed: 0.0,
+            shoot_2_speed: 0.0,
+            shoot_3_speed: 0.0,
+            dribble_angle: 0.0,
+            load_angle: 0.0,
+            catch_angle: 0.0,
+            shoot_angle: 0.0,
+            home_speed: 0.0,
+            gear_ratio: 0.0,
+            angle_offset: 0.0
+        };
+
+        function debugLog(message) {
+            const debugOutput = document.getElementById('debugOutput');
+            const timestamp = new Date().toLocaleTimeString();
+            debugOutput.innerHTML += `<br>[${timestamp}] ${message}`;
+            debugOutput.scrollTop = debugOutput.scrollHeight;
+            console.log(message);
+        }
+
+        function updateStatus(status) {
+            const statusElement = document.getElementById('status');
+            const liveIndicator = document.getElementById('liveIndicator');
+
+            statusElement.textContent = status;
+
+            if (status === 'Connected') {
+                statusElement.classList.add('connected');
+                liveIndicator.classList.add('active');
+            } else {
+                statusElement.classList.remove('connected');
+                liveIndicator.classList.remove('active');
+            }
+        }
+
         function showPage(pageId) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-            
+
             document.getElementById(pageId).classList.add('active');
             event.target.classList.add('active');
         }
 
-        async function connectBLE() {
+        function testBLESupport() {
+            debugLog('Testing Web Bluetooth support...');
+
+            if (!navigator.bluetooth) {
+                debugLog('❌ Web Bluetooth not supported in this browser');
+                debugLog('💡 Try using Chrome, Edge, or Opera');
+                return;
+            }
+
+            debugLog('✅ Web Bluetooth is supported');
+
+            if (!window.isSecureContext) {
+                debugLog('⚠️ Not in secure context (HTTPS required)');
+                return;
+            }
+
+            debugLog('✅ Secure context detected');
+            debugLog('Ready to connect to BLE devices');
+        }
+
+        async function scanDevices() {
+            debugLog('Starting device scan...');
+
             try {
-                device = await navigator.bluetooth.requestDevice({
-                    filters: [{ name: 'ESP32_Motor_Control' }],
-                    services: [SERVICE_UUID]
+                const device = await navigator.bluetooth.requestDevice({
+                    acceptAllDevices: true,
+                    optionalServices: [SERVICE_UUID]
                 });
 
-                server = await device.gatt.connect();
-                service = await server.getPrimaryService(SERVICE_UUID);
-                characteristicGet = await service.getCharacteristic(CHAR_UUID_GET);
-                characteristicSet = await service.getCharacteristic(CHAR_UUID_SET);
-
-                await characteristicGet.startNotifications();
-                characteristicGet.addEventListener('characteristicvaluechanged', handleNotification);
-
-                connected = true;
-                updateStatus('Connected');
-                startLiveUpdates();
-                loadAllParameters();
+                debugLog(`Found device: ${device.name || 'Unknown'} (${device.id})`);
 
             } catch (error) {
-                updateStatus('Connection Failed');
+                debugLog(`Scan error: ${error.message}`);
             }
         }
 
-        function updateStatus(status) {
-            const statusEl = document.getElementById('status');
-            const indicator = document.getElementById('liveIndicator');
-            
-            statusEl.textContent = status;
-            if (status === 'Connected') {
-                statusEl.classList.add('connected');
-                indicator.classList.add('active');
-            } else {
-                statusEl.classList.remove('connected');
-                indicator.classList.remove('active');
+        function clearDebug() {
+            document.getElementById('debugOutput').innerHTML = 'Debug cleared...';
+        }
+
+        function onDisconnected(event) {
+            debugLog('Device disconnected');
+            connected = false;
+            updateStatus('Disconnected');
+
+            const connectBtn = document.getElementById('connectBtn');
+            connectBtn.disabled = false;
+            connectBtn.textContent = 'Connect';
+
+            if (liveUpdateInterval) {
+                clearInterval(liveUpdateInterval);
+                liveUpdateInterval = null;
             }
+
+            // Clear connection timeout if it exists
+            if (connectionTimeout) {
+                clearTimeout(connectionTimeout);
+                connectionTimeout = null;
+            }
+        }
+
+        async function connectBLE() {
+            const connectBtn = document.getElementById('connectBtn');
+
+            if (connected) {
+                disconnect();
+                return;
+            }
+
+            if (!navigator.bluetooth) {
+                debugLog('❌ Web Bluetooth not supported');
+                updateStatus('BLE Not Supported');
+                return;
+            }
+
+            connectBtn.disabled = true;
+            connectBtn.textContent = 'Connecting...';
+            updateStatus('Connecting...');
+
+            debugLog('Starting BLE connection...');
+
+            try {
+                // Clear any existing timeout
+                if (connectionTimeout) {
+                    clearTimeout(connectionTimeout);
+                }
+
+                // Set connection timeout
+                connectionTimeout = setTimeout(() => {
+                    debugLog('❌ Connection timeout');
+                    updateStatus('Connection Timeout');
+                    connectBtn.disabled = false;
+                    connectBtn.textContent = 'Connect';
+                }, 10000);
+
+                debugLog('Requesting device...');
+                device = await navigator.bluetooth.requestDevice({
+                    filters: [
+                        { name: 'ESP32_Motor_Control' },
+                        { namePrefix: 'ESP32' }
+                    ],
+                    optionalServices: [SERVICE_UUID]
+                });
+
+                debugLog(`Device found: ${device.name}`);
+
+                device.addEventListener('gattserverdisconnected', onDisconnected);
+
+                debugLog('Connecting to GATT server...');
+                server = await device.gatt.connect();
+
+                debugLog('Getting primary service...');
+                service = await server.getPrimaryService(SERVICE_UUID);
+
+                debugLog('Getting characteristics...');
+                characteristicGet = await service.getCharacteristic(CHAR_UUID_GET);
+                characteristicSet = await service.getCharacteristic(CHAR_UUID_SET);
+
+                // Set up notifications
+                debugLog('Setting up notifications...');
+                await characteristicGet.startNotifications();
+                characteristicGet.addEventListener('characteristicvaluechanged', handleNotification);
+
+                // Clear connection timeout
+                clearTimeout(connectionTimeout);
+                connectionTimeout = null;
+
+                connected = true;
+                updateStatus('Connected');
+                connectBtn.textContent = 'Disconnect';
+                connectBtn.disabled = false;
+
+                debugLog('✅ Successfully connected to device');
+
+                // Request all parameters
+                await requestAllParameters();
+
+                // Start live updates
+                startLiveUpdates();
+
+            } catch (error) {
+                debugLog(`❌ Connection failed: ${error.message}`);
+                updateStatus('Connection Failed');
+                connectBtn.disabled = false;
+                connectBtn.textContent = 'Connect';
+
+                if (connectionTimeout) {
+                    clearTimeout(connectionTimeout);
+                    connectionTimeout = null;
+                }
+            }
+        }
+
+        function disconnect() {
+            debugLog('Disconnecting...');
+
+            if (liveUpdateInterval) {
+                clearInterval(liveUpdateInterval);
+                liveUpdateInterval = null;
+            }
+
+            if (device && device.gatt.connected) {
+                device.gatt.disconnect();
+            }
+
+            connected = false;
+            updateStatus('Disconnected');
+
+            const connectBtn = document.getElementById('connectBtn');
+            connectBtn.disabled = false;
+            connectBtn.textContent = 'Connect';
         }
 
         function handleNotification(event) {
             const value = new TextDecoder().decode(event.target.value);
+            debugLog(`Received: ${value}`);
+
             try {
                 const data = JSON.parse(value);
-                updateDisplay(data);
-            } catch (e) {
-                console.error('JSON parse error:', e);
-            }
-        }
 
-        function updateDisplay(data) {
-            for (const [key, value] of Object.entries(data)) {
-                const displayEl = document.getElementById(key + '_display');
-                const inputEl = document.getElementById(key + '_input');
-                
-                if (displayEl) {
-                    if (key.includes('angle') || key === 'angle_offset') {
-                        displayEl.textContent = parseFloat(value).toFixed(1) + '°';
-                    } else {
-                        displayEl.textContent = parseFloat(value).toFixed(1);
+                // Update parameters from received data
+                if (data.status === 'OK') {
+                    // Single parameter update response
+                    if (data.param && data.value !== undefined) {
+                        parameters[data.param] = data.value;
+                        updateDisplay(data.param, data.value);
+                    }
+                } else {
+                    // All parameters response
+                    for (const param in data) {
+                        if (parameters.hasOwnProperty(param)) {
+                            parameters[param] = data[param];
+                            updateDisplay(param, data[param]);
+                        }
                     }
                 }
-                if (inputEl) {
-                    inputEl.value = value;
+            } catch (error) {
+                debugLog(`Failed to parse notification: ${error.message}`);
+            }
+        }
+
+        async function requestAllParameters() {
+            if (!connected || !characteristicSet) {
+                debugLog('Not connected');
+                return;
+            }
+
+            try {
+                const command = JSON.stringify({ cmd: 'get_all' });
+                debugLog(`Sending: ${command}`);
+
+                const encoder = new TextEncoder();
+                await characteristicSet.writeValue(encoder.encode(command));
+
+            } catch (error) {
+                debugLog(`Failed to request parameters: ${error.message}`);
+            }
+        }
+
+        async function setParameter(param, value) {
+            if (!connected || !characteristicSet) {
+                debugLog('Not connected');
+                return;
+            }
+
+            try {
+                const command = JSON.stringify({
+                    cmd: 'set',
+                    param: param,
+                    value: value
+                });
+
+                debugLog(`Setting ${param} = ${value}`);
+
+                const encoder = new TextEncoder();
+                await characteristicSet.writeValue(encoder.encode(command));
+
+                // Update local parameter
+                parameters[param] = value;
+                updateDisplay(param, value);
+
+            } catch (error) {
+                debugLog(`Failed to set parameter: ${error.message}`);
+            }
+        }
+
+        function updateDisplay(param, value) {
+            const displayElement = document.getElementById(`${param}_display`);
+            if (displayElement) {
+                // Format display based on parameter type
+                if (param.includes('angle') || param === 'angle_offset') {
+                    displayElement.textContent = `${value.toFixed(1)}°`;
+                } else {
+                    displayElement.textContent = value.toFixed(param.includes('inertia') ? 2 : 1);
                 }
             }
         }
 
-        async function adjustParam(paramName, adjustment) {
-            if (!connected) return;
-            
-            const currentEl = document.getElementById(paramName + '_display');
-            let currentValue = parseFloat(currentEl.textContent.replace('°', '')) || 0;
-            const newValue = Math.max(0, currentValue + adjustment);
-            
-            await setParameter(paramName, newValue);
+        function adjustParam(param, delta) {
+            if (!connected) {
+                debugLog('Not connected');
+                return;
+            }
+
+            const currentValue = parameters[param] || 0;
+            const newValue = currentValue + delta;
+
+            setParameter(param, newValue);
         }
 
-        async function setFromInput(paramName) {
-            if (!connected) return;
-            
-            const inputEl = document.getElementById(paramName + '_input');
-            const value = parseFloat(inputEl.value);
-            
-            if (!isNaN(value)) {
-                await setParameter(paramName, value);
+        function setFromInput(param) {
+            if (!connected) {
+                debugLog('Not connected');
+                return;
             }
-        }
 
-        async function setParameter(paramName, value) {
-            const command = {
-                cmd: 'set',
-                param: paramName,
-                value: value
-            };
-
-            try {
-                const jsonString = JSON.stringify(command);
-                const encoder = new TextEncoder();
-                await characteristicSet.writeValue(encoder.encode(jsonString));
-            } catch (error) {
-                console.error('Error setting parameter:', error);
+            const inputElement = document.getElementById(`${param}_input`);
+            if (!inputElement) {
+                debugLog(`Input element not found for ${param}`);
+                return;
             }
-        }
 
-        async function loadAllParameters() {
-            if (!connected) return;
-
-            const command = { cmd: 'get_all' };
-            try {
-                const jsonString = JSON.stringify(command);
-                const encoder = new TextEncoder();
-                await characteristicSet.writeValue(encoder.encode(jsonString));
-            } catch (error) {
-                console.error('Error loading parameters:', error);
+            const value = parseFloat(inputElement.value);
+            if (isNaN(value)) {
+                debugLog('Invalid input value');
+                return;
             }
+
+            setParameter(param, value);
+            inputElement.value = ''; // Clear input after setting
         }
 
         function startLiveUpdates() {
+            // Request parameter updates every 5 seconds
             liveUpdateInterval = setInterval(() => {
                 if (connected) {
-                    loadAllParameters();
+                    requestAllParameters();
                 }
-            }, 500);
+            }, 5000);
         }
 
-        // Prevent zoom on double tap
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function (event) {
-            const now = (new Date()).getTime();
-            if (now - lastTouchEnd <= 300) {
-                event.preventDefault();
+        // Disable buttons when not connected
+        function updateButtonStates() {
+            const buttons = document.querySelectorAll('.btn:not(.connect-btn)');
+            buttons.forEach(button => {
+                button.disabled = !connected;
+            });
+        }
+
+        // Initialize the interface
+        document.addEventListener('DOMContentLoaded', function () {
+            debugLog('Interface initialized');
+            testBLESupport();
+            updateButtonStates();
+
+            // Update button states when connection changes
+            const originalUpdateStatus = updateStatus;
+            updateStatus = function (status) {
+                originalUpdateStatus(status);
+                updateButtonStates();
+            };
+
+            // Initialize all parameter displays
+            for (const param in parameters) {
+                updateDisplay(param, parameters[param]);
             }
-            lastTouchEnd = now;
-        }, false);
+        });
+
+        // Handle page visibility changes
+        document.addEventListener('visibilitychange', function () {
+            if (document.hidden) {
+                // Page is hidden, pause live updates
+                if (liveUpdateInterval) {
+                    clearInterval(liveUpdateInterval);
+                    liveUpdateInterval = null;
+                }
+            } else {
+                // Page is visible, resume live updates if connected
+                if (connected && !liveUpdateInterval) {
+                    startLiveUpdates();
+                }
+            }
+        });
+
+        // Add keyboard shortcuts for common actions
+        document.addEventListener('keydown', function (event) {
+            if (event.ctrlKey) {
+                switch (event.key) {
+                    case 'c':
+                        event.preventDefault();
+                        if (connected) {
+                            disconnect();
+                        } else {
+                            connectBLE();
+                        }
+                        break;
+                    case 'r':
+                        event.preventDefault();
+                        if (connected) {
+                            requestAllParameters();
+                        }
+                        break;
+                }
+            }
+        });
+
+        // Export functions for global access
+        window.connectBLE = connectBLE;
+        window.showPage = showPage;
+        window.testBLESupport = testBLESupport;
+        window.scanDevices = scanDevices;
+        window.clearDebug = clearDebug;
+        window.adjustParam = adjustParam;
+        window.setFromInput = setFromInput;
     </script>
 </body>
+
 </html>
