@@ -1034,7 +1034,8 @@
                 debugLog('Requesting device...');
                 device = await navigator.bluetooth.requestDevice({
                     filters: [
-                        { name: 'ESP32_Motor_Control' },
+                          { name: 'R2_connect' },
+                        { name: 'R1_connect' },
                         { namePrefix: 'ESP32' }
                     ],
                     optionalServices: [SERVICE_UUID]
