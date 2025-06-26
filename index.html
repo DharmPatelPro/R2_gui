@@ -577,8 +577,8 @@
         <button class="nav-item" onclick="showPage('other')">
             <span>🔄</span> O.Angles
         </button>
-        <button class="nav-item" onclick="showPage('motion')">
-            <span>🚀</span> Motion
+        <button class="nav-item" onclick="showPage('servo')">
+            <span>🚀</span> Servo
         </button>
         <button class="nav-item" onclick="showPage('system')">
             <span>⚙️</span> System
@@ -780,11 +780,11 @@
             </div>
         </div>
 
-        <!-- Motion Parameters Page -->
-        <div class="page" id="motion">
+        <!-- servo Parameters Page -->
+        <div class="page" id="servo">
             <div class="param-group">
                 <div class="param-card">
-                    <div class="param-label">Accel Ratio</div>
+                    <div class="param-label">Servo angle</div>
                     <div class="param-value" id="accel_ratio_display">0.0</div>
                     <div class="param-controls">
                         <div class="input-set-container">
@@ -796,24 +796,13 @@
                 </div>
 
                 <div class="param-card">
-                    <div class="param-label">Decel Ratio</div>
+                    <div class="param-label">Servo delay</div>
                     <div class="param-value" id="decel_ratio_display">0.0</div>
                     <div class="param-controls">
                         <div class="input-set-container">
                             <input type="number" class="input-field" id="decel_ratio_input" step="0.1"
                                 placeholder="0.0">
                             <button class="btn btn-set" onclick="setFromInput('decel_ratio')">Set</button>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="param-card">
-                    <div class="param-label">Inertia</div>
-                    <div class="param-value" id="inertia_display">0.0</div>
-                    <div class="param-controls">
-                        <div class="input-set-container">
-                            <input type="number" class="input-field" id="inertia_input" step="0.01" placeholder="0.00">
-                            <button class="btn btn-set" onclick="setFromInput('inertia')">Set</button>
                         </div>
                     </div>
                 </div>
@@ -1335,7 +1324,7 @@
 
             // Update active nav item
             const navItems = document.querySelectorAll('.nav-item');
-            const pageNames = ['speeds', 'angles', 'other', 'motion', 'system', 'debug'];
+            const pageNames = ['speeds', 'angles', 'other', 'servo', 'system', 'debug'];
             const activeIndex = pageNames.indexOf(pageId);
             if (activeIndex !== -1 && navItems[activeIndex]) {
                 navItems[activeIndex].classList.add('active');
